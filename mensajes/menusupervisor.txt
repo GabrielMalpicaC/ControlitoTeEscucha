@@ -1,0 +1,8 @@
+👋 Hola, ¿cómo puedo ayudarte?
+
+1️⃣ 📝 Registro de asistencia
+2️⃣ 🚪 Registro de salida
+3️⃣ 📊 Diagnóstico de actividad
+0️⃣ ❌ Salir
+
+💬 Responde con el número de la opción que deseas. 😊

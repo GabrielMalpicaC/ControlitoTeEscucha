@@ -1,0 +1,17 @@
+# Directorios
+node_modules/
+dist/
+bot_sessions/
+
+# Archivos de configuración y credenciales
+.env
+google.json
+
+# Archivos de sesión y tokens
+*_sessions
+*tokens
+.wwebjs*
+
+# Archivos temporales y logs
+*.log
+*qr.png

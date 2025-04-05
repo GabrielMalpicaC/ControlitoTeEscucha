@@ -1,4 +1,4 @@
-# Image size ~ 400MB
+# Etapa de build
 FROM node:21-alpine3.18 as builder
 
 WORKDIR /app
@@ -8,9 +8,6 @@ ENV PNPM_HOME=/usr/local/bin
 
 COPY . .
 
-COPY package*.json *-lock.yaml ./
-COPY --from=builder /app/src/assets ./assets
-
 RUN apk add --no-cache --virtual .gyp \
         python3 \
         make \
@@ -19,6 +16,7 @@ RUN apk add --no-cache --virtual .gyp \
     && pnpm install && pnpm run build \
     && apk del .gyp
 
+# Etapa final (deploy)
 FROM node:21-alpine3.18 as deploy
 
 WORKDIR /app

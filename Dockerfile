@@ -9,6 +9,7 @@ ENV PNPM_HOME=/usr/local/bin
 COPY . .
 
 COPY package*.json *-lock.yaml ./
+COPY --from=builder /app/src/assets ./assets
 
 RUN apk add --no-cache --virtual .gyp \
         python3 \

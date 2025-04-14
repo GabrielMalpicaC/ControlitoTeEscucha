@@ -10,7 +10,7 @@ export const menuCliente = addKeyword<Provider, Database>(EVENTS.ACTION)
     .addAnswer(menuSolicitudes, 
         { capture: true }, 
         async (ctx, ctxFn) => {
-            const opciones = ["1", "2", "0"];
+            const opciones = ["1", "0"];
             if (!opciones.includes(ctx.body)) {
                 return ctxFn.fallBack("❌ No elegiste una opción válida, por favor intenta nuevamente.");
             }

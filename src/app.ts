@@ -13,11 +13,6 @@ const PORT = process.env.PORT ?? 3008
 
 const bienvenida = leerArchivo('./mensajes/bienvenida.txt');
 
-const flowAlgo = addKeyword(EVENTS.WELCOME)
-    .addAction(async (ctx, ctxFn) =>{
-        console.log(ctx.body)
-        ctxFn.gotoFlow(flowValidation);
-    })
 
 const flowPrincipal = addKeyword<Provider, Database>(EVENTS.ACTION)
     .addAnswer(bienvenida, {
@@ -43,17 +38,32 @@ const flowPrincipal = addKeyword<Provider, Database>(EVENTS.ACTION)
         return ctxFn.gotoFlow(flujo);
     });
 
-const flowValidation = addKeyword(EVENTS.WELCOME)
-    .addAction(async (ctx, ctxFn) => {
-        if (!await isActive(ctx, ctxFn)) {
+    const flowRouter = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
+        const isUserActive = await isActive(ctx, ctxFn)
+    
+        if (!isUserActive) {
+            console.log('Usuario no activo, finalizando flujo.')
             return ctxFn.endFlow()
-        } else {
-            return ctxFn.gotoFlow(flowPrincipal)
         }
+    
+        console.log('Redirigiendo al flujo principal...')
+        return ctxFn.gotoFlow(flowPrincipal)
     })
+    
 
 const main = async () => {
-    const adapterFlow = createFlow([flowAlgo,flowDirector ,flowValidation ,flowPrincipal, menuTodero, menuCliente, menuAdministrador, menuServiciosGenerales, menuSalvavidas, menuSupervisor])
+
+    const adapterFlow = createFlow([
+        flowRouter,
+        flowDirector,
+        flowPrincipal,
+        menuTodero,
+        menuCliente,
+        menuAdministrador,
+        menuServiciosGenerales,
+        menuSalvavidas,
+        menuSupervisor,
+    ])
     
     const adapterProvider = createProvider(Provider)
     const adapterDB = new Database()

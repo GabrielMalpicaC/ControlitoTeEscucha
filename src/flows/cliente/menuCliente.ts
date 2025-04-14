@@ -7,6 +7,7 @@ import { danioFlow as danioFlow } from './danioFlow'
 const menuSolicitudes = leerArchivo('./mensajes/menucliente.txt');
 
 export const menuCliente = addKeyword<Provider, Database>(EVENTS.ACTION)
+    .addAnswer('Llegúe a menuCliente')
     .addAnswer(menuSolicitudes, 
         { capture: true }, 
         async (ctx, ctxFn) => {

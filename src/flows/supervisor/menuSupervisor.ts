@@ -1,13 +1,19 @@
 import { addKeyword, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
 import { BaileysProvider as Provider } from '@builderbot/provider-baileys'
-import { leerArchivo } from '../../../scripts/utils'
 import { diagnosticoActividad } from './diagnosticoActividad';
 import { ingresoSupervisor } from './ingresoSupervisor';
 import { salidaSupervisor } from './salidaSupervisor';
 
 
-const menuSupervisorOpciones = leerArchivo('./mensajes/menusupervisor.txt');
+const menuSupervisorOpciones = `👋 Hola, ¿cómo puedo ayudarte?
+
+1️⃣ 📝 Registro de asistencia
+2️⃣ 🚪 Registro de salida
+3️⃣ 📊 Diagnóstico de actividad
+0️⃣ ❌ Salir
+
+💬 Responde con el número de la opción que deseas. 😊`
 
 export const menuSupervisor = addKeyword<Provider, Database>(EVENTS.ACTION)
     .addAnswer(menuSupervisorOpciones, 

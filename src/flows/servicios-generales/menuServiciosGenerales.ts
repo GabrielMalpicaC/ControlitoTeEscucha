@@ -1,13 +1,19 @@
 import { addKeyword, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
 import { BaileysProvider as Provider } from '@builderbot/provider-baileys'
-import { leerArchivo } from '../../../scripts/utils'
 import { ingresoServiciosGenerales } from './ingresoServiciosGenerales';
 import { salidaServiciosGenerales } from './salidaServiciosGenerales';
 import { malUsoZonaComun } from './malUsoZona';
 
 
-const menuAseadoraOpciones = leerArchivo('./mensajes/menuserviciosgenerales.txt');
+const menuAseadoraOpciones = `👋 Hola, ¿cómo puedo ayudarte?
+
+1️⃣ 📝 Registro de asistencia
+2️⃣ 🚪 Registro de salida
+3️⃣ ⚠️ Reporte de mal uso de zonas comunes
+0️⃣ ❌ Salir
+
+💬 Responde con el número de la opción que deseas. 😊`
 
 export const menuServiciosGenerales = addKeyword<Provider, Database>(EVENTS.ACTION)
     .addAnswer(menuAseadoraOpciones, 

@@ -1,11 +1,11 @@
 import { addKeyword } from '@builderbot/bot';
 import { uploadFile } from 'scripts/drive';
 import { appendToSheet } from 'scripts/sheets';
-import { conjuntos, definirConjunto, leerArchivo, formattedTime } from 'scripts/utils';
+import { conjuntos, definirConjunto, formattedTime, menuConjuntos } from 'scripts/utils';
 
 const spreadsheetId = '1yPdxjd8eQ3rVrn1PDD026imqOnWld6vO_YcmWHeq1sk';
 const driveId = '1qtvzBCTHGpunYO7ZhlJGQiJp7ERYFV9-';
-const menuconjuntos = leerArchivo('./mensajes/menuconjuntos.txt');
+const menuconjuntos = menuConjuntos
 
 export const diagnosticoActividad = addKeyword('3')
     .addAnswer(menuconjuntos, { capture: true }, 

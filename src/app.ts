@@ -1,7 +1,7 @@
 import { createBot, createProvider, createFlow, addKeyword, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
 import { BaileysProvider as Provider } from '@builderbot/provider-baileys'
-import { isActive, leerArchivo, obtenerNombreYRolYConjunto, arregloNumeros } from '../scripts/utils'
+import { isActive, obtenerNombreYRolYConjunto, arregloNumeros } from '../scripts/utils'
 import { menuTodero } from '~/flows/todero/menuTodero'
 import { menuCliente } from '~/flows/cliente/menuCliente'
 import { menuSupervisor } from '~/flows/supervisor/menuSupervisor'
@@ -11,13 +11,13 @@ import { menuAdministrador } from '~/flows/administrador/menuAdmi'
 import { flowDirector } from './flows/director/flowDirector'
 const PORT = process.env.PORT ?? 3008
 
-const bienvenida = leerArchivo('./mensajes/bienvenida.txt');
+const bienvenida = `¡Hola! Soy Controlito, tu asistente virtual de Control S.A.S.. 
+Estoy aquí para ayudarte con lo que necesites, siempre dispuesto a escucharte. 🌟`;
 
 
 const flowPrincipal = addKeyword<Provider, Database>(EVENTS.ACTION)
-    .addAnswer('Este es el flowPrincipal')
     .addAnswer(bienvenida, {
-        media: './imgs/controlito.jpg'
+        media: 'https://github.com/GabrielMalpicaC/ControlitoTeEscucha/blob/main/imgs/controlito.jpg?raw=true'
     }, async (ctx, ctxFn) => {
 
         const persona = obtenerNombreYRolYConjunto(arregloNumeros, ctx.from);
@@ -46,8 +46,6 @@ const flowPrincipal = addKeyword<Provider, Database>(EVENTS.ACTION)
             console.log('Usuario no activo, finalizando flujo.')
             return ctxFn.endFlow()
         }
-    
-        console.log('Redirigiendo al flujo principal...')
         return ctxFn.gotoFlow(flowPrincipal)
     })
     

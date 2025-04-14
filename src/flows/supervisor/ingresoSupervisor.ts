@@ -1,9 +1,9 @@
 import { addKeyword } from '@builderbot/bot'
 import { appendToSheet } from 'scripts/sheets';
-import { conjuntos, definirConjunto, leerArchivo, formattedTime } from 'scripts/utils';
+import { conjuntos, definirConjunto, formattedTime, menuConjuntos } from 'scripts/utils';
 
 const spreadsheetId = '1N0E-4I3rDk6MDddAK_QaaL-8XDGSFXu_mzBE3eFGv5U';
-const menuconjuntos = leerArchivo('./mensajes/menuconjuntos.txt');
+const menuconjuntos = menuConjuntos
 
 export const ingresoSupervisor = addKeyword('1')
     .addAnswer(menuconjuntos, { capture: true }, 

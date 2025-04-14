@@ -1,7 +1,6 @@
 import { addKeyword, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
 import { BaileysProvider as Provider } from '@builderbot/provider-baileys'
-import { leerArchivo } from '../../../scripts/utils'
 
 import { ingresoTodero } from './ingresoTodero';
 import { evidenciasTodero } from './evidenciasTodero';
@@ -9,7 +8,14 @@ import { salidaTodero } from './salidaTodero';
 import { tomaPiscinaFlow } from './tomaPiscinas';
 import { flujoPedidoInsumosTodero } from './solicitudInsumos';
 
-const menuToderoOpciones = leerArchivo('./mensajes/menutodero.txt');
+const menuToderoOpciones = `1️⃣ 🌞 Iniciar jornada
+2️⃣ 🛑 Finalizar jornada
+3️⃣ 📸 Enviar evidencias de trabajo
+4️⃣ 🏊‍♂️ Toma de muestras de piscina
+5️⃣ 📦 Solicitud de insumo
+0️⃣ ❌ Salir
+
+💬 Responde con el número de la opción que deseas. 😊`
 
 export const menuTodero = addKeyword<Provider, Database>(EVENTS.ACTION)
     .addAnswer(menuToderoOpciones, 

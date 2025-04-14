@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 type GlobalState = {
     encendido?: boolean;
     convOff?: Record<string, string>;
@@ -13,6 +10,27 @@ type CtxFn = {
     };
     flowDynamic: (message: string) => Promise<void>;
 };
+
+export const menuConjuntos = 
+`🏘️ ¿Desde qué conjunto residencial nos estás escribiendo?
+
+1. *Alborada*
+2. *Balcones de Gratamira*
+3. *Buganviles*
+4. *Centauros A*
+5. *Cerrocampestre*
+6. *Emaús*
+7. *Mi Finca en el Llano*
+8. *Montearroyo*
+9. *Nueva Esperanza 2*
+10. *Parques de Castillas*
+11. *Quintas de Morelia*
+12. *Quintas de San Souuci*
+13. *Serramonte 3*
+14. *Torres de Mediterráneo*
+15. *Torres de San Juan*
+
+💬 Responde con el número correspondiente. 😊`;
 
 export const conjuntos = [
     { '1': 'Alborada' },
@@ -89,17 +107,6 @@ const hours = String(currentDate.getHours()).padStart(2, '0');
 const minutes = String(currentDate.getMinutes()).padStart(2, '0');
 const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 export const formattedTime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-
-export function leerArchivo(txtFile: string): string | null {
-    const archivoRuta = path.resolve(txtFile); // Resuelve la ruta absoluta del archivo
-    if (fs.existsSync(archivoRuta)) { // Verifica si el archivo existe
-      const contenido = fs.readFileSync(archivoRuta, 'utf-8'); // Lee el archivo en formato utf-8
-      return contenido;
-    } else {
-      console.error('El archivo no existe.');
-      return null;
-    }
-  }
 
 // Verificar si el bot global está activo
 export const isActive = async (_, { globalState }) => {
@@ -262,7 +269,6 @@ const utils = {
     toggleActive,
     conversationsOff, 
     definirConjunto,
-    leerArchivo 
 };
 
 export default utils;

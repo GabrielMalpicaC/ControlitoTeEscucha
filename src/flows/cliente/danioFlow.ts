@@ -1,11 +1,11 @@
 import { addKeyword } from '@builderbot/bot'
 import { uploadFile } from 'scripts/drive';
 import { appendToSheet } from 'scripts/sheets';
-import { conjuntos, definirConjunto, leerArchivo, formattedTime } from 'scripts/utils';
+import { conjuntos, definirConjunto, formattedTime, menuConjuntos } from 'scripts/utils';
 
 const spreadsheetId = '18ImTrxRuJP7hc_-uc2QGHJEzLYqmuFjiNn3gSyezQso';
 const driveId = '1yOum-0TtyZzArce4UNRG5ETM1j-nQ-y4'
-const menuconjuntos = leerArchivo('./mensajes/menuconjuntos.txt');
+const menuconjuntos = menuConjuntos
 
 const danioFlow = addKeyword('1')
     .addAnswer(menuconjuntos, { capture: true }, 

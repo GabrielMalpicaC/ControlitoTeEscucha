@@ -1,13 +1,16 @@
 import { addKeyword, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
 import { BaileysProvider as Provider } from '@builderbot/provider-baileys'
-import { leerArchivo } from '../../../scripts/utils'
 import { danioFlow as danioFlow } from './danioFlow'
 
-const menuSolicitudes = leerArchivo('./mensajes/menucliente.txt');
+const menuSolicitudes = `🤔 ¿Cómo puedo ayudarte hoy?
+
+1️⃣ 🔧 Reportar un daño
+0️⃣ ❌ Salir
+
+💬 Responde con el número de la opción que deseas. 😊`;
 
 export const menuCliente = addKeyword<Provider, Database>(EVENTS.ACTION)
-    .addAnswer('Llegúe a menuCliente')
     .addAnswer(menuSolicitudes, 
         { capture: true }, 
         async (ctx, ctxFn) => {

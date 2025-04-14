@@ -1,9 +1,18 @@
 import { addKeyword } from '@builderbot/bot'
 import { appendToSheet } from 'scripts/sheets';
-import { leerArchivo, formattedTime } from 'scripts/utils';
+import { formattedTime } from 'scripts/utils';
 
 const spreadsheetId = '17mXZ_HJbQE5YnExDzqc0scA2tpt1svBZV_LrtdfdFWo';
-const menuPQRS = leerArchivo('./mensajes/menuPQRS.txt');
+const menuPQRS = `📝 ¿En qué te podemos ayudar?
+
+1️⃣ 📢 Queja
+2️⃣ 🗣️ Sugerencia
+3️⃣ 💡 Reclamo
+4️⃣ ❓ Consulta
+5️⃣ 🔄 Solicitud de seguimiento
+0️⃣ ❌ Salir
+
+💬 Responde con el número de la opción que deseas. 😊`;
 
 export const pqrsFlow = addKeyword('2')
     .addAnswer(menuPQRS, { capture: true }, async (ctx, ctxFn) => {

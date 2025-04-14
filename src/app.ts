@@ -15,6 +15,7 @@ const bienvenida = leerArchivo('./mensajes/bienvenida.txt');
 
 
 const flowPrincipal = addKeyword<Provider, Database>(EVENTS.ACTION)
+    .addAnswer('Este es el flowPrincipal')
     .addAnswer(bienvenida, {
         media: './imgs/controlito.jpg'
     }, async (ctx, ctxFn) => {

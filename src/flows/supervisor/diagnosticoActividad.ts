@@ -1,3 +1,6 @@
+import * as os from 'os';
+import * as path from 'path';
+import * as fs from 'fs';
 import { addKeyword } from '@builderbot/bot';
 import { uploadFile } from 'scripts/drive';
 import { appendToSheet } from 'scripts/sheets';
@@ -62,27 +65,31 @@ export const diagnosticoActividad = addKeyword('3')
             await ctxFn.state.update({ calificacion: ctx.body });
         }
     )
-    .addAnswer("📸 Por favor, envíame una foto como evidencia. 😊", { capture: true }, 
+    .addAnswer("📸 *Por favor, envía una foto como evidencia.* 😊", { capture: true }, 
         async (ctx, ctxFn) => {
-            // Verificar si el mensaje contiene una imagen
             if (!ctx.message || !ctx.message.imageMessage) {
                 return ctxFn.fallBack("❌ Debes enviar una imagen válida.");
             }
-                            
+            
             const { imageMessage } = ctx.message;
             const mimeType = imageMessage.mimetype;
-                            
-            // Validar que sea una imagen por MIME type
+            await ctxFn.state.update({ mimeType: mimeType });
+            
             if (!mimeType.startsWith('image/')) {
                 return ctxFn.fallBack("🚫 El archivo debe ser una imagen (JPEG, PNG, etc.). Por favor, intenta nuevamente.");
             }
-                            
-            // Guardar el archivo y subirlo
-            const userInfo = ctxFn.state.getMyState();
-            const localPath = await ctxFn.provider.saveFile(ctx, { path: './uploads' });
-                            
-            // Pasar el mimeType a la función uploadFile
-            uploadFile(localPath, ctx.from + '-' + ctx.pushName, userInfo.conjunto, driveId, spreadsheetId, mimeType);
+    
+            // Usar directorio temporal del sistema
+            const tempDir = os.tmpdir();
+            const uploadDir = path.join(tempDir, 'whatsapp-uploads');
+                
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+    
+            const localPath = await ctxFn.provider.saveFile(ctx, { path: uploadDir });
+            await ctxFn.state.update({ localPath: localPath });
+    
         }
     )
     .addAnswer("✅ *¡Gracias por la información! El registro de la actividad fue exitoso.* 😊", null,
@@ -103,6 +110,23 @@ export const diagnosticoActividad = addKeyword('3')
                 ], spreadsheetId, userInfo.conjunto);
             } catch (error) {
                 console.log('Error al guardar en la hoja de cálculo:', error);
+            }
+            try {
+                await uploadFile(
+                    userInfo.localPath, 
+                    `${ctx.from}-${ctx.pushName}`, 
+                    userInfo.conjunto, 
+                    driveId, 
+                    spreadsheetId, 
+                    userInfo.mimeType
+                );
+            } catch (error) {
+                console.error('Error al subir archivo:', error);
+                return ctxFn.fallBack("❌ Ocurrió un error al subir tu imagen. Por favor, inténtalo nuevamente.");
+            } finally {
+                if (fs.existsSync(userInfo.localPath)) {
+                    fs.unlinkSync(userInfo.localPath);
+                }
             }
             ctxFn.endFlow();
         }

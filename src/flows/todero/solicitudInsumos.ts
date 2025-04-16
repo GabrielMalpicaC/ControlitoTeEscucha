@@ -1,3 +1,6 @@
+import * as os from 'os';
+import * as path from 'path';
+import * as fs from 'fs';
 import { addKeyword } from '@builderbot/bot';
 import { appendToSheet } from 'scripts/sheets';
 import { formattedTime } from 'scripts/utils';
@@ -10,26 +13,29 @@ const driveId = '1PFuyYI-S1huUX75eMyCLPb9EUZ1Tf2bC'
 export const flujoPedidoInsumosTodero = addKeyword('5')
     .addAnswer("📸Por favor, envíame una foto con los insumos que deseas pedir. 📦✨\n\nAsegúrate de que la foto sea clara y esté bien iluminada. 😊", { capture: true }, 
         async (ctx, ctxFn) => {
-            
-            // Verificar si el mensaje contiene una imagen
             if (!ctx.message || !ctx.message.imageMessage) {
                 return ctxFn.fallBack("❌ Debes enviar una imagen válida.");
             }
             
             const { imageMessage } = ctx.message;
             const mimeType = imageMessage.mimetype;
+            await ctxFn.state.update({ mimeType: mimeType });
             
-            // Validar que sea una imagen por MIME type
             if (!mimeType.startsWith('image/')) {
                 return ctxFn.fallBack("🚫 El archivo debe ser una imagen (JPEG, PNG, etc.). Por favor, intenta nuevamente.");
             }
-            
-            // Guardar el archivo y subirlo
-            const userInfo = ctxFn.state.getMyState();
-            const localPath = await ctxFn.provider.saveFile(ctx, { path: './uploads' });
-            
-            // Pasar el mimeType a la función uploadFile
-            uploadFile(localPath, ctx.from + '-' + ctx.pushName, userInfo.conjunto, driveId, spreadsheetId, mimeType);
+    
+            // Usar directorio temporal del sistema
+            const tempDir = os.tmpdir();
+            const uploadDir = path.join(tempDir, 'whatsapp-uploads');
+                
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+    
+            const localPath = await ctxFn.provider.saveFile(ctx, { path: uploadDir });
+            await ctxFn.state.update({ localPath: localPath });
+    
         }
     )
     .addAnswer('📝 *Confirmando tu pedido...*\nEn breve recibirás más información. 🚚', null, async (ctx, ctxFn) => {
@@ -45,6 +51,23 @@ export const flujoPedidoInsumosTodero = addKeyword('5')
             ], spreadsheetId, userInfo.conjunto);
         } catch (error) {
             console.log('Error: ' + error);
+        }
+        try {
+            await uploadFile(
+                userInfo.localPath, 
+                `${ctx.from}-${ctx.pushName}`, 
+                userInfo.conjunto, 
+                driveId, 
+                spreadsheetId, 
+                userInfo.mimeType
+            );
+        } catch (error) {
+            console.error('Error al subir archivo:', error);
+            return ctxFn.fallBack("❌ Ocurrió un error al subir tu imagen. Por favor, inténtalo nuevamente.");
+        } finally {
+            if (fs.existsSync(userInfo.localPath)) {
+                fs.unlinkSync(userInfo.localPath);
+            }
         }
         ctxFn.endFlow();
     });

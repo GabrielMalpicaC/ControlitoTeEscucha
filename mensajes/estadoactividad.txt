@@ -1,9 +1,0 @@
-Aquí tienes una versión ajustada con una opción más pertinente:
-
-¿Cuál es el estado de la actividad que enviaste?
-
-1️⃣ ✅ Terminada
-2️⃣ ⚠️ En progreso
-3️⃣ ⏳ Sin empezar
-
-💬 Responde con el número de la opción que corresponde. 😊

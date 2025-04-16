@@ -1,8 +1,0 @@
-1️⃣ 🌞 Iniciar jornada
-2️⃣ 🛑 Finalizar jornada
-3️⃣ 📸 Enviar evidencias de trabajo
-4️⃣ 🏊‍♂️ Toma de muestras de piscina
-5️⃣ 📦 Solicitud de insumo
-0️⃣ ❌ Salir
-
-💬 Responde con el número de la opción que deseas. 😊

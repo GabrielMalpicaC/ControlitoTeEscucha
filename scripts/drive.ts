@@ -65,5 +65,11 @@ export async function uploadFile(
     }
   } catch (err) {
     console.error('Upload file error', err);
+  } finally{
+    try {
+      fs.unlinkSync(filePath);
+    } catch (cleanupError) {
+      console.error('Error al limpiar archivo temporal:', cleanupError);
+    }
   }
 }

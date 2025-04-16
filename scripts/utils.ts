@@ -51,6 +51,7 @@ export const conjuntos = [
 ];
 
 export const arregloNumeros = [
+    { conjunto: "Alborada", nombre: "Gabriel Malpica Cruz", numero: "573196748953", rol: "Administrador" },
     { conjunto: "Alborada", nombre: "JOHAN SANTIAGO CARACAS BASTIDAS", numero: "573219230538", rol: "TODERO" },
     { conjunto: "Alborada", nombre: "MIGUEL ANGEL LOPEZ MAHECHA", numero: "573242535592", rol: "SALVAVIDAS" },
     { conjunto: "Alborada", nombre: "BRAYAN ANDRES GIRATA QUIROGA", numero: "573224358921", rol: "TODERO" },

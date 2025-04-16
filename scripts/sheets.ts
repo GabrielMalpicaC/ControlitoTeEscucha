@@ -112,35 +112,35 @@ export async function getFilteredData(columnName: string, valueToSearch: string 
 }
 
 export async function insertImageLinkToSheet(
-    imageUrl: string,
-    sheetName: string,
-    spreadsheetId: string  // Añadido parámetro spreadsheetId
-  ): Promise<void> {
-    const sheets = google.sheets({ version: 'v4', auth });
-  
-    try {
-      // Obtén la última fila con datos de la hoja específica.
-      const getRes = await sheets.spreadsheets.values.get({
-        spreadsheetId,
-        range: `${sheetName}!A1:Z`,
-        majorDimension: 'ROWS',
-      });
-  
-      const rows = getRes.data.values || [];
-      const lastRowIndex = rows.length; // Última fila con datos
-      const lastColumnIndex = rows[0]?.length - 1 || 0; // Última columna con datos (ajustado)
-  
-      // Calcula el rango para insertar la imagen.
-      const columnLetter = String.fromCharCode(65 + lastColumnIndex);
-      const range = `${sheetName}!${columnLetter}${lastRowIndex}`;
-  
-      const formula = `=IMAGE("${imageUrl}")`;
-  
-      await writeToSheet([[formula]], range, spreadsheetId);
-    } catch (error) {
-      console.error(`Error al insertar la imagen en la hoja "${sheetName}":`, error);
-      throw error;
-    }
+  imageUrl: string,
+  sheetName: string,
+  spreadsheetId: string  // Añadido parámetro spreadsheetId
+): Promise<void> {
+  const sheets = google.sheets({ version: 'v4', auth });
+
+  try {
+    // Obtén la última fila con datos de la hoja específica.
+    const getRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${sheetName}!A1:Z`,
+      majorDimension: 'ROWS',
+    });
+
+    const rows = getRes.data.values || [];
+    const lastRowIndex = rows.length; // Última fila con datos
+    const lastColumnIndex = rows[0]?.length - 1 || 0; // Última columna con datos (ajustado)
+
+    // Calcula el rango para insertar la imagen.
+    const columnLetter = String.fromCharCode(65 + lastColumnIndex);
+    const range = `${sheetName}!${columnLetter}${lastRowIndex}`;
+
+    const formula = `=IMAGE("${imageUrl}")`;
+
+    await writeToSheet([[formula]], range, spreadsheetId);
+  } catch (error) {
+    console.error(`Error al insertar la imagen en la hoja "${sheetName}":`, error);
+    throw error;
+  }
 }
 
 export async function insertLinkToSheet(

@@ -1,17 +1,27 @@
 import { google } from 'googleapis';
+import dotenv from 'dotenv';
 
-// Define una interfaz para los datos que se pasan a las funciones.
+dotenv.config();  // Cargar las variables de entorno
+
 interface SheetValues {
-    values: (string | number)[][];
+  values: (string | number)[][];
 }
 
-// Inicializa la librería cliente de Google y configura la autenticación con credenciales de la cuenta de servicio.
+// Asegúrate de que las credenciales estén definidas en las variables de entorno
+const rawCredentials = process.env.GOOGLE_CREDENTIALS;
+if (!rawCredentials) {
+  throw new Error('La variable GOOGLE_CREDENTIALS no está definida');
+}
+
+// Parsear las credenciales JSON
+const credentials = JSON.parse(rawCredentials);
+
 const auth = new google.auth.GoogleAuth({
-    keyFile: './google.json', // Ruta al archivo de clave de tu cuenta de servicio.
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'], // Alcance para la API de Google Sheets.
+  credentials,
+  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-const spreadsheetId = '1IqHqa7AxO984bq20xYBEA78vsCyOv67LyMe9V3oFEsM'; // ID de tu hoja de cálculo.
+const spreadsheetId = '1IqHqa7AxO984bq20xYBEA78vsCyOv67LyMe9V3oFEsM';
 
 // Función asíncrona para escribir datos en una hoja de cálculo de Google.
 export async function writeToSheet(
